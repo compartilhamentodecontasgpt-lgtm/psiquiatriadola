@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prontuário Digital - Psiquiatria</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#0a192f">
+</head>
+<body>
+    <div class="app-container">
+        <!-- CABEÇALHO -->
+        <header class="header">
+            <h1><i class="icon">🧠</i> Prontuário Psiquiátrico</h1>
+            <button id="menuToggle" class="menu-btn">☰</button>
+        </header>
+
+        <!-- MENU LATERAL -->
+        <nav id="sidebar" class="sidebar">
+            <ul>
+                <li class="active" data-page="paciente">📋 Ficha do Paciente</li>
+                <li data-page="anamnese">📝 Anamnese SOAPe</li>
+                <li data-page="agenda">📅 Agenda</li>
+                <li data-page="receituario">💊 Receituário</li>
+                <li data-page="backup">💾 Backup / Dados</li>
+            </ul>
+        </nav>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <main class="content">
+            
+            <!-- PÁGINA 1: DADOS DO PACIENTE -->
+            <section id="paciente" class="page active">
+                <h2>Dados Cadastrais</h2>
+                <div class="form-grid">
+                    <input type="text" id="nome" placeholder="Nome Completo" class="input">
+                    <input type="date" id="nascimento" class="input">
+                    <input type="tel" id="telefone" placeholder="Telefone" class="input">
+                    <input type="text" id="responsavel" placeholder="Responsável" class="input">
+                    <textarea id="endereco" placeholder="Endereço Completo" class="input"></textarea>
+                </div>
+
+                <h3>Queixa Principal</h3>
+                <textarea id="queixa" class="input" rows="3"></textarea>
+
+                <h3>História da Doença Atual</h3>
+                <textarea id="historia" class="input" rows="4"></textarea>
+
+                <button onclick="salvarDados()" class="btn primary">💾 Salvar Dados</button>
+                <button onclick="window.print()" class="btn secondary">🖨️ Imprimir Ficha</button>
+            </section>
+
+            <!-- PÁGINA 2: ANAMNESE SOAPE -->
+            <section id="anamnese" class="page">
+                <h2>Metodologia SOAPe</h2>
+                
+                <div class="card">
+                    <h3>S - Subjetivo</h3>
+                    <p class="small">O que o paciente relata</p>
+                    <textarea id="s_subjetivo" class="input" rows="4"></textarea>
+                </div>
+
+                <div class="card">
+                    <h3>O - Objetivo</h3>
+                    <p class="small">Observação clínica, exame físico e mental</p>
+                    <textarea id="o_objetivo" class="input" rows="4"></textarea>
+                </div>
+
+                <div class="card">
+                    <h3>A - Análise / Avaliação</h3>
+                    <p class="small">Diagnóstico ou hipótese diagnóstica (CID)</p>
+                    <textarea id="a_analise" class="input" rows="4"></textarea>
+                </div>
+
+                <div class="card">
+                    <h3>P - Plano</h3>
+                    <p class="small">Conduta, exames, retornos</p>
+                    <textarea id="p_plano" class="input" rows="4"></textarea>
+                </div>
+                
+                <div class="card">
+                    <h3>e - Evolução</h3>
+                    <p class="small">Registro de progresso</p>
+                    <textarea id="e_evolucao" class="input" rows="4"></textarea>
+                </div>
+            </section>
+
+            <!-- PÁGINA 3: AGENDA -->
+            <section id="agenda" class="page">
+                <h2>Agenda de Consultas</h2>
+                <div class="agenda-form">
+                    <input type="date" id="ag_data" class="input">
+                    <input type="time" id="ag_hora" class="input">
+                    <input type="text" id="ag_nome" placeholder="Nome do Paciente" class="input">
+                    <button onclick="addEvento()" class="btn primary">Adicionar</button>
+                </div>
+                <div id="listaAgenda" class="lista-agenda"></div>
+            </section>
+
+            <!-- PÁGINA 4: RECEITUÁRIO -->
+            <section id="receituario" class="page">
+                <h2>Receituário e Farmacologia</h2>
+                
+                <div class="form-grid">
+                    <input type="text" id="med_nome" placeholder="Nome do Medicamento" class="input">
+                    <input type="text" id="med_dose" placeholder="Dosagem / Apresentação" class="input">
+                    <input type="text" id="med_poso" placeholder="Posologia (Ex: 1x ao dia)" class="input">
+                </div>
+
+                <h3>Informações Técnicas</h3>
+                <textarea id="med_indicacao" placeholder="Indicação / Uso" class="input"></textarea>
+                <textarea id="med_riscos" placeholder="Riscos e Benefícios" class="input"></textarea>
+                <textarea id="med_contra" placeholder="Contraindicações" class="input"></textarea>
+                <textarea id="med_colaterais" placeholder="Efeitos Colaterais" class="input"></textarea>
+
+                <button onclick="salvarMedicamento()" class="btn primary">Adicionar ao Receituário</button>
+
+                <h3>📋 Lista de Medicamentos Prescritos</h3>
+                <div id="listaMedicamentos" class="lista-meds"></div>
+            </section>
+
+            <!-- PÁGINA 5: BACKUP -->
+            <section id="backup" class="page">
+                <h2>Gerenciamento de Dados</h2>
+                <div class="backup-box">
+                    <p>Para não perder os dados ou transferir para outro celular/computador, use os botões abaixo:</p>
+                    
+                    <button onclick="exportarDados()" class="btn success">📤 Exportar Dados (Salvar)</button>
+                    <p class="aviso">Isso gerará um arquivo com todos os seus registros.</p>
+                    
+                    <hr>
+                    
+                    <label for="importarArquivo" class="btn warning">📥 Importar Dados</label>
+                    <input type="file" id="importarArquivo" accept=".json" hidden>
+                    <p class="aviso">Selecione o arquivo salvo anteriormente para restaurar tudo.</p>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
